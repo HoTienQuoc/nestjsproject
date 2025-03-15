@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    ports:
+      - '27017:27017' # Mở cổng MongoDB trên localhost
+    volumes:
+      - mongo_data:/data/db # Lưu trữ dữ liệu
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: always
+    depends_on:
+      - mongo
+    ports:
+      - '8081:8081' # Truy cập Mongo Express qua trình duyệt
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_BASICAUTH: 'false' # Không yêu cầu đăng nhập Mongo Express
+
+volumes:
+  mongo_data:
+    driver: local
